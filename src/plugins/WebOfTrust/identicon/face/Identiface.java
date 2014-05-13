@@ -5,14 +5,11 @@ import static java.awt.Color.white;
 import static java.awt.RenderingHints.KEY_ANTIALIASING;
 import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
 import static java.lang.Math.PI;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 import static java.util.Arrays.asList;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
@@ -97,51 +94,6 @@ public class Identiface {
 					0.12 + 0.05 * earWidth,
 					0.17 + 0.06 * earHeight / 4
 			);
-		}
-
-	}
-
-	private static class Oval {
-
-		private final double centerX;
-		private final double centerY;
-		private final double width;
-		private final double height;
-		private final double rotation;
-		private final double lineWidth;
-		private final Color lineColor;
-		private final Color fillColor;
-
-		private Oval(Point2D.Double center, double width, double height, double rotation, double lineWidth, Color lineColor, Color fillColor) {
-			this(center.getX(), center.getY(), width, height, rotation, lineWidth, lineColor, fillColor);
-		}
-
-		private Oval(double centerX, double centerY, double width, double height, double rotation, double lineWidth, Color lineColor, Color fillColor) {
-			this.centerX = centerX;
-			this.centerY = centerY;
-			this.width = width;
-			this.height = height;
-			this.rotation = rotation;
-			this.lineWidth = lineWidth;
-			this.lineColor = lineColor;
-			this.fillColor = fillColor;
-		}
-
-		public void draw(Graphics2D graphics, int width, int height) {
-			Graphics2D rotated = (Graphics2D) graphics.create();
-			rotated.setStroke(new BasicStroke((int) (lineWidth * width)));
-			rotated.translate(centerX * width, centerY * height);
-			rotated.rotate(rotation);
-			if (fillColor != null) {
-				rotated.setColor(fillColor);
-				rotated.fillOval((int) ((-this.width / 2) * width), (int) ((-this.height / 2) * height), (int) (this.width * width), (int) (this.height * height));
-			}
-			rotated.setColor(lineColor);
-			rotated.drawOval((int) ((-this.width / 2) * width), (int) ((-this.height / 2) * height), (int) (this.width * width), (int) (this.height * height));
-		}
-
-		public Point2D.Double getPoint(double radians) {
-			return new Point2D.Double(centerX + cos(radians) * width / 2, centerY - sin(radians) * height / 2);
 		}
 
 	}
