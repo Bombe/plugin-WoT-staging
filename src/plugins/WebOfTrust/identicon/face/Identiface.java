@@ -67,8 +67,8 @@ public class Identiface {
 
 		public Head(double headWidth, Color skinColor, double earWidth, double earHeight) {
 			head = new Oval(0.5, 0.5, headWidth, 0.8, 0, 1 / 40.0, black, skinColor);
-			leftEar = new Oval(head.getPoint(PI), earWidth, earHeight, 0, 1 / 40.0, black, skinColor);
-			rightEar = new Oval(head.getPoint(0), earWidth, earHeight, 0, 1 / 40.0, black, skinColor);
+			leftEar = new Oval(head.getPoint(PI), earWidth, earHeight, -PI / 10, 1 / 40.0, black, skinColor);
+			rightEar = new Oval(head.getPoint(0), earWidth, earHeight, PI / 10, 1 / 40.0, black, skinColor);
 		}
 
 		public void render(Graphics2D graphics, int width, int height) {
