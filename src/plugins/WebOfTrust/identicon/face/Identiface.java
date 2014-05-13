@@ -4,12 +4,15 @@ import static java.awt.Color.black;
 import static java.awt.Color.white;
 import static java.awt.RenderingHints.KEY_ANTIALIASING;
 import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 import static java.util.Arrays.asList;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
@@ -61,57 +64,26 @@ public class Identiface {
 				new Color(0xb0, 0x80, 0x50)
 		);
 
-		private final Color skinColor;
-		private final Rectangle2D.Double head;
-		private final Rectangle2D.Double leftEar;
-		private final Rectangle2D.Double rightEar;
+		private final Oval head;
+		private final Oval leftEar;
+		private final Oval rightEar;
 
 		public Head(double headWidth, Color skinColor, double earWidth, double earHeight) {
-			this.skinColor = skinColor;
-			head = new Rectangle2D.Double(0.5 - headWidth / 2, 0.1, headWidth, 0.8);
-			leftEar = new Rectangle2D.Double(0.5 - headWidth / 2 - earWidth / 2, 0.5 - earHeight / 2, earWidth, earHeight);
-			rightEar = new Rectangle2D.Double(0.5 + headWidth / 2 - earWidth / 2, 0.5 - earHeight / 2, earWidth, earHeight);
+			head = new Oval(0.5, 0.5, headWidth, 0.8, 0, 1 / 40.0, black, skinColor);
+			leftEar = new Oval(head.getPoint(PI), earWidth, earHeight, 0, 1 / 40.0, black, skinColor);
+			rightEar = new Oval(head.getPoint(0), earWidth, earHeight, 0, 1 / 40.0, black, skinColor);
 		}
 
 		public void render(Graphics2D graphics, int width, int height) {
 			graphics.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
 			graphics.setStroke(new BasicStroke(width / 40.0f));
 			drawEars(graphics, width, height);
-			drawAndFillHead(graphics, width, height);
-		}
-
-		private void fillOval(Graphics2D graphics, Rectangle2D.Double rectangle, int width, int height) {
-			graphics.fillOval((int) (rectangle.getX() * width), (int) (rectangle.getY() * height), (int) (rectangle.getWidth() * width), (int) (rectangle.getHeight() * height));
-		}
-
-		private void drawOval(Graphics2D graphics, Rectangle2D.Double rectangle, int width, int height) {
-			graphics.drawOval((int) (rectangle.getX() * width), (int) (rectangle.getY() * height), (int) (rectangle.getWidth() * width), (int) (rectangle.getHeight() * height));
-		}
-
-		private void drawAndFillHead(Graphics2D graphics, int width, int height) {
-			graphics.setColor(skinColor);
-			fillOval(graphics, head, width, height);
-			graphics.setColor(black);
-			drawOval(graphics, head, width, height);
+			head.draw(graphics, width, height);
 		}
 
 		private void drawEars(Graphics2D graphics, int width, int height) {
-			drawLeftEar(graphics, width, height);
-			drawRightEar(graphics, width, height);
-		}
-
-		private void drawLeftEar(Graphics2D graphics, int width, int height) {
-			graphics.setColor(skinColor);
-			fillOval(graphics, leftEar, width, height);
-			graphics.setColor(black);
-			drawOval(graphics, leftEar, width, height);
-		}
-
-		private void drawRightEar(Graphics2D graphics, int width, int height) {
-			graphics.setColor(skinColor);
-			fillOval(graphics, rightEar, width, height);
-			graphics.setColor(black);
-			drawOval(graphics, rightEar, width, height);
+			leftEar.draw(graphics, width, height);
+			rightEar.draw(graphics, width, height);
 		}
 
 		public static Head createHead(BitShiftedInputStream bitStream) throws IOException {
@@ -125,6 +97,51 @@ public class Identiface {
 					0.12 + 0.05 * earWidth,
 					0.17 + 0.06 * earHeight / 4
 			);
+		}
+
+	}
+
+	private static class Oval {
+
+		private final double centerX;
+		private final double centerY;
+		private final double width;
+		private final double height;
+		private final double rotation;
+		private final double lineWidth;
+		private final Color lineColor;
+		private final Color fillColor;
+
+		private Oval(Point2D.Double center, double width, double height, double rotation, double lineWidth, Color lineColor, Color fillColor) {
+			this(center.getX(), center.getY(), width, height, rotation, lineWidth, lineColor, fillColor);
+		}
+
+		private Oval(double centerX, double centerY, double width, double height, double rotation, double lineWidth, Color lineColor, Color fillColor) {
+			this.centerX = centerX;
+			this.centerY = centerY;
+			this.width = width;
+			this.height = height;
+			this.rotation = rotation;
+			this.lineWidth = lineWidth;
+			this.lineColor = lineColor;
+			this.fillColor = fillColor;
+		}
+
+		public void draw(Graphics2D graphics, int width, int height) {
+			Graphics2D rotated = (Graphics2D) graphics.create();
+			rotated.setStroke(new BasicStroke((int) (lineWidth * width)));
+			rotated.translate(centerX * width, centerY * height);
+			rotated.rotate(rotation);
+			if (fillColor != null) {
+				rotated.setColor(fillColor);
+				rotated.fillOval((int) ((-this.width / 2) * width), (int) ((-this.height / 2) * height), (int) (this.width * width), (int) (this.height * height));
+			}
+			rotated.setColor(lineColor);
+			rotated.drawOval((int) ((-this.width / 2) * width), (int) ((-this.height / 2) * height), (int) (this.width * width), (int) (this.height * height));
+		}
+
+		public Point2D.Double getPoint(double radians) {
+			return new Point2D.Double(centerX + cos(radians) * width / 2, centerY - sin(radians) * height / 2);
 		}
 
 	}
