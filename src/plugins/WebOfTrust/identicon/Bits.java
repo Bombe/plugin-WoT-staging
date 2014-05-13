@@ -17,6 +17,8 @@
 
 package plugins.WebOfTrust.identicon;
 
+import static java.lang.Math.min;
+
 /**
  * Utility class for bit manipulations.
  *
@@ -39,6 +41,21 @@ public class Bits {
 	 */
 	public static int decodeBits(int value, int bitIndex, int numberOfBits) {
 		return (value >> bitIndex) & ((1 << numberOfBits) - 1);
+	}
+
+	public static long decodeBits(byte[] data, int bitIndex, int numberOfBits) {
+		long result = 0;
+		int remainingBits = numberOfBits;
+		int currentBitIndex = bitIndex;
+		while (remainingBits > 0) {
+			int byteIndex = currentBitIndex / 8;
+			int indexOfFirstBitInByteToRead = currentBitIndex & 0x07;
+			int bitsToRead = min(remainingBits, 8 - indexOfFirstBitInByteToRead);
+			result = (result << bitsToRead) | decodeBits(data[byteIndex], indexOfFirstBitInByteToRead, bitsToRead);
+			remainingBits -= bitsToRead;
+			currentBitIndex += bitsToRead;
+		}
+		return result;
 	}
 
 	/**
