@@ -73,7 +73,6 @@ public class Identiface {
 
 		public void render(Graphics2D graphics, int width, int height) {
 			graphics.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
-			graphics.setStroke(new BasicStroke(width / 40.0f));
 			drawEars(graphics, width, height);
 			head.draw(graphics, width, height);
 		}
