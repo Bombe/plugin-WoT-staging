@@ -90,8 +90,8 @@ public class Identiface {
 			return new Head(
 					0.5 + (0.3 * headShape / 4),
 					skinColors.get(skinColor),
-					0.12 + 0.05 * earWidth,
-					0.17 + 0.06 * earHeight / 4
+					0.12 + 0.04 * earWidth,
+					0.18 + 0.06 * earHeight / 4
 			);
 		}
 
