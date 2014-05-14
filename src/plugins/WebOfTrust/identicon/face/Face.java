@@ -113,7 +113,7 @@ public class Face {
 				}
 			}
 		},
-		triangled {
+		squared {
 			private static final int ROWS = 4;
 			private static final int COLUMNS = 4;
 
@@ -121,7 +121,7 @@ public class Face {
 			public void paint(Graphics2D graphics, int width, int height) {
 				for (int x = 0; x < COLUMNS; ++x) {
 					for (int y = 0; y < ROWS; ++y) {
-						graphics.fillOval((int) ((x + 0.2) * width / COLUMNS), (int) ((y + 0.2) * height / ROWS), (int) (0.6 * (width / COLUMNS)), (int) (0.6 * (height / ROWS)));
+						graphics.fillRect((int) ((x + 0.25) * width / COLUMNS), (int) ((y + 0.25) * height / ROWS), (int) (0.5 * width / COLUMNS), (int) (0.5 * height / ROWS));
 					}
 				}
 			}
