@@ -53,7 +53,11 @@ class Oval {
 	}
 
 	public Point2D.Double getPoint(double radians) {
-		return new Point2D.Double(centerX + cos(radians) * width / 2, centerY - sin(radians) * height / 2);
+		double x = centerX + cos(radians) * width / 2;
+		double y = centerY - sin(radians) * height / 2;
+		double rotatedX = centerX + ((x - centerX) * cos(rotation) - (y - centerY) * sin(rotation));
+		double rotatedY = centerY + ((x - centerX) * sin(rotation) + (y - centerY) * cos(rotation));
+		return new Point2D.Double(rotatedX, rotatedY);
 	}
 
 }
