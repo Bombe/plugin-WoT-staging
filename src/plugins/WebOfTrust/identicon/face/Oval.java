@@ -1,5 +1,7 @@
 package plugins.WebOfTrust.identicon.face;
 
+import static java.awt.BasicStroke.CAP_ROUND;
+import static java.awt.BasicStroke.JOIN_ROUND;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
@@ -45,7 +47,7 @@ class Oval {
 
 	public void draw(Graphics2D graphics, int width, int height) {
 		Graphics2D rotated = (Graphics2D) graphics.create();
-		rotated.setStroke(new BasicStroke((int) (lineWidth * width)));
+		rotated.setStroke(new BasicStroke((int) (lineWidth * width), CAP_ROUND, JOIN_ROUND));
 		rotated.translate(centerX * width, centerY * height);
 		rotated.rotate(rotation);
 		if (fillColor != null) {
