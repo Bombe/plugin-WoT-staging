@@ -7,6 +7,8 @@ import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
 import static java.lang.Math.PI;
 import static java.lang.Math.toRadians;
 import static plugins.WebOfTrust.identicon.face.Face.LeftEarRing.bottom;
+import static plugins.WebOfTrust.identicon.face.Face.LeftEarRing.doubleBottom;
+import static plugins.WebOfTrust.identicon.face.Face.LeftEarRing.top;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -52,12 +54,19 @@ public class Identiface {
 		private final Oval rightEar;
 		private final List<Oval> leftEarRings = new ArrayList<Oval>();
 
-		public Head(double headWidth, Color skinColor, double earWidth, double earHeight, boolean leftBottomEarRing) {
+		public Head(double headWidth, Color skinColor, double earWidth, double earHeight, boolean leftBottomEarRing, boolean leftBottomDoubleEarRing, boolean leftTopEarRing) {
 			head = new Oval(0.5, 0.5, headWidth, 0.8, 0, 1 / 40.0, black, skinColor);
 			leftEar = new Oval(head.getPoint(PI), earWidth, earHeight, -PI / 10, 1 / 40.0, black, skinColor);
 			rightEar = new Oval(head.getPoint(0), earWidth, earHeight, PI / 10, 1 / 40.0, black, skinColor);
 			if (leftBottomEarRing) {
 				leftEarRings.add(new Oval(leftEar.getPoint(toRadians(225)), 0.025, 0.05, PI / 10, 1 / 40.0, new Color(0xe0, 0xe0, 0x00)));
+			}
+			if (leftBottomDoubleEarRing) {
+				leftEarRings.add(new Oval(leftEar.getPoint(toRadians(235)), 0.025, 0.05, PI * 0.1, 1 / 40.0, new Color(0xe0, 0xe0, 0x00)));
+				leftEarRings.add(new Oval(leftEar.getPoint(toRadians(210)), 0.025, 0.05, PI * 0.21, 1 / 40.0, new Color(0xe0, 0xe0, 0x00)));
+			}
+			if (leftTopEarRing) {
+				leftEarRings.add(new Oval(leftEar.getPoint(toRadians(120)), 0.025, 0.05, -PI * 0.25, 1 / 40.0, new Color(0xe0, 0xe0, 0x00)));
 			}
 		}
 
@@ -88,7 +97,9 @@ public class Identiface {
 					face.getSkinColor().getColor(),
 					face.getEarWidth().getWidth(),
 					face.getEarHeight().getHeight(),
-					face.getLeftEarRing() == bottom
+					face.getLeftEarRing() == bottom,
+					face.getLeftEarRing() == doubleBottom,
+					face.getLeftEarRing() == top
 			);
 		}
 

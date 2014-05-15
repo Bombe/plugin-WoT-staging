@@ -213,6 +213,8 @@ public class Face {
 
 		none,
 		bottom,
+		doubleBottom,
+		top,
 
 	}
 
@@ -269,7 +271,7 @@ public class Face {
 		SkinColor skinColor = SkinColor.values()[(int) decodeBits(data, 8, 3)];
 		EarWidth earWidth = EarWidth.values()[(int) decodeBits(data, 11, 1)];
 		EarHeight earHeight = EarHeight.values()[(int) decodeBits(data, 12, 2)];
-		LeftEarRing leftEarRing = LeftEarRing.values()[(int) decodeBits(data, 14, 1)];
+		LeftEarRing leftEarRing = LeftEarRing.values()[(int) decodeBits(data, 14, 2)];
 		return new Face(backgroundColor, backgroundPattern, headShape, skinColor, earWidth, earHeight, leftEarRing);
 	}
 
