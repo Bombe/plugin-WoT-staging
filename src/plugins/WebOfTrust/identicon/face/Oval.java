@@ -24,6 +24,10 @@ class Oval {
 	private final Color lineColor;
 	private final Color fillColor;
 
+	Oval(Point2D.Double center, double width, double height, double rotation, double lineWidth, Color lineColor) {
+		this(center.getX(), center.getY(), width, height, rotation, lineWidth, lineColor, null);
+	}
+
 	Oval(Point2D.Double center, double width, double height, double rotation, double lineWidth, Color lineColor, Color fillColor) {
 		this(center.getX(), center.getY(), width, height, rotation, lineWidth, lineColor, fillColor);
 	}
