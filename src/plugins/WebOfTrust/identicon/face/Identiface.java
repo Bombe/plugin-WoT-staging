@@ -5,6 +5,7 @@ import static java.awt.Color.white;
 import static java.awt.RenderingHints.KEY_ANTIALIASING;
 import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
 import static java.lang.Math.PI;
+import static java.lang.Math.toRadians;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -46,11 +47,13 @@ public class Identiface {
 		private final Oval head;
 		private final Oval leftEar;
 		private final Oval rightEar;
+		private final Oval leftEarRing;
 
-		public Head(double headWidth, Color skinColor, double earWidth, double earHeight) {
+		public Head(double headWidth, Color skinColor, double earWidth, double earHeight, Color leftEarRing) {
 			head = new Oval(0.5, 0.5, headWidth, 0.8, 0, 1 / 40.0, black, skinColor);
 			leftEar = new Oval(head.getPoint(PI), earWidth, earHeight, -PI / 10, 1 / 40.0, black, skinColor);
 			rightEar = new Oval(head.getPoint(0), earWidth, earHeight, PI / 10, 1 / 40.0, black, skinColor);
+			this.leftEarRing = leftEarRing == null ? null : new Oval(leftEar.getPoint(toRadians(225)), 0.025, 0.05, PI / 10, 1 / 40.0, leftEarRing);
 		}
 
 		public void render(Graphics2D graphics, int width, int height) {
@@ -60,8 +63,18 @@ public class Identiface {
 		}
 
 		private void drawEars(Graphics2D graphics, int width, int height) {
-			leftEar.draw(graphics, width, height);
+			drawLeftEar(graphics, width, height);
 			rightEar.draw(graphics, width, height);
+		}
+
+		private void drawLeftEar(Graphics2D graphics, int width, int height) {
+			if (leftEarRing != null) {
+				leftEarRing.drawArc(graphics, width, height, toRadians(255), toRadians(180));
+			}
+			leftEar.draw(graphics, width, height);
+			if (leftEarRing != null) {
+				leftEarRing.drawArc(graphics, width, height, toRadians(75), toRadians(180));
+			}
 		}
 
 		public static Head createHead(Face face) {
@@ -69,7 +82,8 @@ public class Identiface {
 					face.getHeadShape().getWidth(),
 					face.getSkinColor().getColor(),
 					face.getEarWidth().getWidth(),
-					face.getEarHeight().getHeight()
+					face.getEarHeight().getHeight(),
+					face.getLeftEarRing().getColor()
 			);
 		}
 

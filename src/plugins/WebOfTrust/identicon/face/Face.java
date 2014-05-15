@@ -209,20 +209,39 @@ public class Face {
 
 	}
 
+	public enum LeftEarRing {
+
+		none(null),
+		gold(new Color(0xe0, 0xe0, 0x00));
+
+		private final Color color;
+
+		private LeftEarRing(Color color) {
+			this.color = color;
+		}
+
+		public Color getColor() {
+			return color;
+		}
+
+	}
+
 	private final BackgroundColor backgroundColor;
 	private final BackgroundPattern backgroundPattern;
 	private final HeadShape headShape;
 	private final SkinColor skinColor;
 	private final EarWidth earWidth;
 	private final EarHeight earHeight;
+	private final LeftEarRing leftEarRing;
 
-	public Face(BackgroundColor backgroundColor, BackgroundPattern backgroundPattern, HeadShape headShape, SkinColor skinColor, EarWidth earWidth, EarHeight earHeight) {
+	public Face(BackgroundColor backgroundColor, BackgroundPattern backgroundPattern, HeadShape headShape, SkinColor skinColor, EarWidth earWidth, EarHeight earHeight, LeftEarRing leftEarRing) {
 		this.backgroundColor = backgroundColor;
 		this.backgroundPattern = backgroundPattern;
 		this.headShape = headShape;
 		this.skinColor = skinColor;
 		this.earWidth = earWidth;
 		this.earHeight = earHeight;
+		this.leftEarRing = leftEarRing;
 	}
 
 	public BackgroundColor getBackgroundColor() {
@@ -249,6 +268,10 @@ public class Face {
 		return earHeight;
 	}
 
+	public LeftEarRing getLeftEarRing() {
+		return leftEarRing;
+	}
+
 	public static Face createFace(byte[] data) {
 		BackgroundColor backgroundColor = BackgroundColor.values()[(int) decodeBits(data, 0, 3)];
 		BackgroundPattern backgroundPattern = BackgroundPattern.values()[(int) decodeBits(data, 3, 3)];
@@ -256,7 +279,8 @@ public class Face {
 		SkinColor skinColor = SkinColor.values()[(int) decodeBits(data, 8, 3)];
 		EarWidth earWidth = EarWidth.values()[(int) decodeBits(data, 11, 1)];
 		EarHeight earHeight = EarHeight.values()[(int) decodeBits(data, 12, 2)];
-		return new Face(backgroundColor, backgroundPattern, headShape, skinColor, earWidth, earHeight);
+		LeftEarRing leftEarRing = LeftEarRing.values()[(int) decodeBits(data, 14, 1)];
+		return new Face(backgroundColor, backgroundPattern, headShape, skinColor, earWidth, earHeight, leftEarRing);
 	}
 
 }
