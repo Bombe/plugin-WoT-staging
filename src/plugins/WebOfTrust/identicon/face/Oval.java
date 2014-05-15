@@ -4,6 +4,7 @@ import static java.awt.BasicStroke.CAP_ROUND;
 import static java.awt.BasicStroke.JOIN_ROUND;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import static java.lang.Math.toDegrees;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -56,6 +57,19 @@ class Oval {
 		}
 		rotated.setColor(lineColor);
 		rotated.drawOval((int) ((-this.width / 2) * width), (int) ((-this.height / 2) * height), (int) (this.width * width), (int) (this.height * height));
+	}
+
+	public void drawArc(Graphics2D graphics, int width, int height, double startRadians, double arcRadians) {
+		Graphics2D rotated = (Graphics2D) graphics.create();
+		rotated.setStroke(new BasicStroke((int) (lineWidth * width), CAP_ROUND, JOIN_ROUND));
+		rotated.translate(centerX * width, centerY * height);
+		rotated.rotate(rotation);
+		if (fillColor != null) {
+			rotated.setColor(fillColor);
+			rotated.fillArc((int) ((-this.width / 2) * width), (int) ((-this.height / 2) * height), (int) (this.width * width), (int) (this.height * height), (int) toDegrees(startRadians), (int) toDegrees(arcRadians));
+		}
+		rotated.setColor(lineColor);
+		rotated.drawArc((int) ((-this.width / 2) * width), (int) ((-this.height / 2) * height), (int) (this.width * width), (int) (this.height * height), (int) toDegrees(startRadians), (int) toDegrees(arcRadians));
 	}
 
 	public Point2D.Double getPoint(double radians) {
