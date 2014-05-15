@@ -6,11 +6,14 @@ import static java.awt.RenderingHints.KEY_ANTIALIASING;
 import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
 import static java.lang.Math.PI;
 import static java.lang.Math.toRadians;
+import static plugins.WebOfTrust.identicon.face.Face.LeftEarRing.bottom;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Alternativ identicon implementation that draws faces from the bits of a
@@ -47,13 +50,15 @@ public class Identiface {
 		private final Oval head;
 		private final Oval leftEar;
 		private final Oval rightEar;
-		private final Oval leftEarRing;
+		private final List<Oval> leftEarRings = new ArrayList<Oval>();
 
-		public Head(double headWidth, Color skinColor, double earWidth, double earHeight, Color leftEarRing) {
+		public Head(double headWidth, Color skinColor, double earWidth, double earHeight, boolean leftBottomEarRing) {
 			head = new Oval(0.5, 0.5, headWidth, 0.8, 0, 1 / 40.0, black, skinColor);
 			leftEar = new Oval(head.getPoint(PI), earWidth, earHeight, -PI / 10, 1 / 40.0, black, skinColor);
 			rightEar = new Oval(head.getPoint(0), earWidth, earHeight, PI / 10, 1 / 40.0, black, skinColor);
-			this.leftEarRing = leftEarRing == null ? null : new Oval(leftEar.getPoint(toRadians(225)), 0.025, 0.05, PI / 10, 1 / 40.0, leftEarRing);
+			if (leftBottomEarRing) {
+				leftEarRings.add(new Oval(leftEar.getPoint(toRadians(225)), 0.025, 0.05, PI / 10, 1 / 40.0, new Color(0xe0, 0xe0, 0x00)));
+			}
 		}
 
 		public void render(Graphics2D graphics, int width, int height) {
@@ -68,11 +73,11 @@ public class Identiface {
 		}
 
 		private void drawLeftEar(Graphics2D graphics, int width, int height) {
-			if (leftEarRing != null) {
+			for (Oval leftEarRing : leftEarRings) {
 				leftEarRing.drawArc(graphics, width, height, toRadians(255), toRadians(180));
 			}
 			leftEar.draw(graphics, width, height);
-			if (leftEarRing != null) {
+			for (Oval leftEarRing : leftEarRings) {
 				leftEarRing.drawArc(graphics, width, height, toRadians(75), toRadians(180));
 			}
 		}
@@ -83,7 +88,7 @@ public class Identiface {
 					face.getSkinColor().getColor(),
 					face.getEarWidth().getWidth(),
 					face.getEarHeight().getHeight(),
-					face.getLeftEarRing().getColor()
+					face.getLeftEarRing() == bottom
 			);
 		}
 

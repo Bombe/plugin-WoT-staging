@@ -211,18 +211,8 @@ public class Face {
 
 	public enum LeftEarRing {
 
-		none(null),
-		gold(new Color(0xe0, 0xe0, 0x00));
-
-		private final Color color;
-
-		private LeftEarRing(Color color) {
-			this.color = color;
-		}
-
-		public Color getColor() {
-			return color;
-		}
+		none,
+		bottom,
 
 	}
 
