@@ -56,7 +56,7 @@ public class Identiface {
 		private final Oval leftEye;
 		private final Oval rightEye;
 
-		public Head(double headWidth, Color skinColor, double earWidth, double earHeight, boolean leftBottomEarRing, boolean leftBottomDoubleEarRing, boolean leftTopEarRing, Color leftEyeColor, Color rightEyeColor) {
+		public Head(double headWidth, Color skinColor, double earWidth, double earHeight, boolean leftBottomEarRing, boolean leftBottomDoubleEarRing, boolean leftTopEarRing, Color leftEyeColor, Color rightEyeColor, double eyeWidth, double eyeHeight) {
 			head = new Oval(0.5, 0.5, headWidth, 0.8, 0, 1 / 40.0, black, skinColor);
 			leftEar = new Oval(head.getPoint(PI), earWidth, earHeight, -PI / 10, 1 / 40.0, black, skinColor);
 			rightEar = new Oval(head.getPoint(0), earWidth, earHeight, PI / 10, 1 / 40.0, black, skinColor);
@@ -70,8 +70,8 @@ public class Identiface {
 			if (leftTopEarRing) {
 				leftEarRings.add(new Oval(leftEar.getPoint(toRadians(120)), 0.025, 0.05, -PI * 0.25, 1 / 40.0, new Color(0xe0, 0xe0, 0x00)));
 			}
-			leftEye = new Oval(0.5 - ((headWidth / 2) * 0.35), 0.35, 0.12, 0.07, 0, 1 / 80, black, leftEyeColor);
-			rightEye = new Oval(0.5 + ((headWidth / 2) * 0.35), 0.35, 0.12, 0.07, 0, 1 / 80, black, leftEyeColor);
+			leftEye = new Oval(0.5 - ((headWidth / 2) * 0.35), 0.35, eyeWidth, eyeHeight, 0, 1 / 80, black, leftEyeColor);
+			rightEye = new Oval(0.5 + ((headWidth / 2) * 0.35), 0.35, eyeWidth, eyeHeight, 0, 1 / 80, black, leftEyeColor);
 		}
 
 		public void render(Graphics2D graphics, int width, int height) {
@@ -107,7 +107,9 @@ public class Identiface {
 					face.getLeftEarRing() == doubleBottom,
 					face.getLeftEarRing() == top,
 					face.getEyeColor().getLeftEyeColor(),
-					face.getEyeColor().getRightEyeColor()
+					face.getEyeColor().getRightEyeColor(),
+					face.getEyeSize().getWidth(),
+					face.getEyeSize().getHeight()
 			);
 		}
 

@@ -251,6 +251,31 @@ public class Face {
 
 	}
 
+	public enum EyeSize {
+
+		smallAndFlat(0.09, 0.035),
+		small(0.09, 0.05),
+		normal(0.11, 0.06),
+		large(0.12, 0.07);
+
+		private final double width;
+		private final double height;
+
+		private EyeSize(double width, double height) {
+			this.width = width;
+			this.height = height;
+		}
+
+		public double getWidth() {
+			return width;
+		}
+
+		public double getHeight() {
+			return height;
+		}
+
+	}
+
 	private final BackgroundColor backgroundColor;
 	private final BackgroundPattern backgroundPattern;
 	private final HeadShape headShape;
@@ -259,8 +284,9 @@ public class Face {
 	private final EarHeight earHeight;
 	private final LeftEarRing leftEarRing;
 	private final EyeColor eyeColor;
+	private final EyeSize eyeSize;
 
-	public Face(BackgroundColor backgroundColor, BackgroundPattern backgroundPattern, HeadShape headShape, SkinColor skinColor, EarWidth earWidth, EarHeight earHeight, LeftEarRing leftEarRing, EyeColor eyeColor) {
+	public Face(BackgroundColor backgroundColor, BackgroundPattern backgroundPattern, HeadShape headShape, SkinColor skinColor, EarWidth earWidth, EarHeight earHeight, LeftEarRing leftEarRing, EyeColor eyeColor, EyeSize eyeSize) {
 		this.backgroundColor = backgroundColor;
 		this.backgroundPattern = backgroundPattern;
 		this.headShape = headShape;
@@ -269,6 +295,7 @@ public class Face {
 		this.earHeight = earHeight;
 		this.leftEarRing = leftEarRing;
 		this.eyeColor = eyeColor;
+		this.eyeSize = eyeSize;
 	}
 
 	public BackgroundColor getBackgroundColor() {
@@ -303,6 +330,10 @@ public class Face {
 		return eyeColor;
 	}
 
+	public EyeSize getEyeSize() {
+		return eyeSize;
+	}
+
 	public static Face createFace(byte[] data) {
 		BackgroundColor backgroundColor = BackgroundColor.values()[(int) decodeBits(data, 0, 3)];
 		BackgroundPattern backgroundPattern = BackgroundPattern.values()[(int) decodeBits(data, 3, 3)];
@@ -312,7 +343,8 @@ public class Face {
 		EarHeight earHeight = EarHeight.values()[(int) decodeBits(data, 12, 2)];
 		LeftEarRing leftEarRing = LeftEarRing.values()[(int) decodeBits(data, 14, 2)];
 		EyeColor eyeColor = EyeColor.values()[(int) decodeBits(data, 16, 3)];
-		return new Face(backgroundColor, backgroundPattern, headShape, skinColor, earWidth, earHeight, leftEarRing, eyeColor);
+		EyeSize eyeSize = EyeSize.values()[(int) decodeBits(data, 19, 2)];
+		return new Face(backgroundColor, backgroundPattern, headShape, skinColor, earWidth, earHeight, leftEarRing, eyeColor, eyeSize);
 	}
 
 }
